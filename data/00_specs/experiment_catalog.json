@@ -1,0 +1,50 @@
+{
+  "experiments": [
+    {
+      "id": "experiment_01_baseline_classification",
+      "title_ru": "Эксперимент 1 — базовая классификация",
+      "dataset_ru": "наша синтетика fraud / suspicious / safe",
+      "question_ru": "Как меняется качество классификации при переходе от rules baseline к LLM-подходам?",
+      "compared_architectures": [
+        "rules_baseline",
+        "single_llm",
+        "llm_checklist",
+        "llm_self_check",
+        "llm_ensemble"
+      ],
+      "primary_metrics": [
+        "accuracy",
+        "precision_fraud",
+        "recall_fraud",
+        "f1_fraud"
+      ],
+      "secondary_metrics": [
+        "latency_ms_avg",
+        "cost_usd_estimate",
+        "false_positives",
+        "false_negatives"
+      ]
+    },
+    {
+      "id": "experiment_02_augmentation_robustness",
+      "title_ru": "Эксперимент 2 — устойчивость к аугментации",
+      "dataset_ru": "original / paraphrased / subtle / asr_noise",
+      "question_ru": "Сохраняет ли модель качество, если мошенник переформулирует фразы или если текст искажается ASR-подобным шумом?",
+      "compared_architectures": [
+        "llm_checklist",
+        "llm_self_check",
+        "llm_ensemble"
+      ],
+      "primary_metrics": [
+        "accuracy",
+        "recall_fraud"
+      ],
+      "secondary_metrics": [
+        "false_positives",
+        "false_negatives",
+        "latency_ms_avg",
+        "cost_usd_estimate"
+      ]
+    }
+  ]
+}

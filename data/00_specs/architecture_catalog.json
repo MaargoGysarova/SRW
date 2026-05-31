@@ -1,0 +1,29 @@
+{
+  "architectures": [
+    {
+      "id": "rules_baseline",
+      "title_ru": "Rules baseline",
+      "description_ru": "простые правила по ключевым словам"
+    },
+    {
+      "id": "single_llm",
+      "title_ru": "Single LLM",
+      "description_ru": "одна LLM классифицирует текст"
+    },
+    {
+      "id": "llm_checklist",
+      "title_ru": "LLM checklist",
+      "description_ru": "LLM анализирует текст по чек-листу признаков"
+    },
+    {
+      "id": "llm_self_check",
+      "title_ru": "LLM self-check",
+      "description_ru": "LLM сначала отвечает, потом проверяет собственный вывод"
+    },
+    {
+      "id": "llm_ensemble",
+      "title_ru": "LLM ensemble",
+      "description_ru": "несколько независимых LLM/промптов голосуют"
+    }
+  ]
+}

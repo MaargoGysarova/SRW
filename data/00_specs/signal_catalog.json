@@ -1,0 +1,74 @@
+[
+  {
+    "id": "urgency",
+    "description_ru": "срочность: «прямо сейчас», «немедленно»"
+  },
+  {
+    "id": "pressure",
+    "description_ru": "давление, запугивание"
+  },
+  {
+    "id": "bank_impersonation",
+    "description_ru": "представляется банком"
+  },
+  {
+    "id": "government_impersonation",
+    "description_ru": "представляется госорганом"
+  },
+  {
+    "id": "police_impersonation",
+    "description_ru": "представляется следователем / полицией"
+  },
+  {
+    "id": "sms_code_request",
+    "description_ru": "просит код из СМС"
+  },
+  {
+    "id": "password_request",
+    "description_ru": "просит пароль"
+  },
+  {
+    "id": "card_data_request",
+    "description_ru": "просит данные карты"
+  },
+  {
+    "id": "loan_fraud",
+    "description_ru": "оформление / отмена кредита"
+  },
+  {
+    "id": "safe_account_transfer",
+    "description_ru": "перевод на «безопасный счёт»"
+  },
+  {
+    "id": "secrecy",
+    "description_ru": "просит никому не говорить"
+  },
+  {
+    "id": "do_not_hang_up",
+    "description_ru": "просит не класть трубку"
+  },
+  {
+    "id": "instruction_to_lie",
+    "description_ru": "просит соврать банку / оператору"
+  },
+  {
+    "id": "remote_access_app",
+    "description_ru": "просит установить приложение"
+  },
+  {
+    "id": "phishing_link",
+    "description_ru": "просит перейти по ссылке"
+  },
+  {
+    "id": "trust_building",
+    "description_ru": "называет личные данные, операции, суммы"
+  },
+  {
+    "id": "voice_biometrics_abuse",
+    "description_ru": "просит диктовать фразы роботу"
+  },
+  {
+    "id": "asr_noise",
+    "description_ru": "ошибки распознавания речи"
+  }
+]

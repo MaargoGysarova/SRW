@@ -1,0 +1,36 @@
+{
+  "metrics": [
+    {
+      "id": "accuracy",
+      "description_ru": "доля правильных предсказаний по всем классам"
+    },
+    {
+      "id": "precision_fraud",
+      "description_ru": "точность по fraud-классу"
+    },
+    {
+      "id": "recall_fraud",
+      "description_ru": "полнота по fraud-классу"
+    },
+    {
+      "id": "f1_fraud",
+      "description_ru": "F1-score по fraud-классу"
+    },
+    {
+      "id": "latency_ms_avg",
+      "description_ru": "среднее время обработки одного примера в миллисекундах"
+    },
+    {
+      "id": "cost_usd_estimate",
+      "description_ru": "оценка стоимости обработки"
+    },
+    {
+      "id": "false_positives",
+      "description_ru": "число ложных срабатываний по fraud-классу"
+    },
+    {
+      "id": "false_negatives",
+      "description_ru": "число пропущенных fraud-примеров"
+    }
+  ]
+}

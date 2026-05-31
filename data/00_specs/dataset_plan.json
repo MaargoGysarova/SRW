@@ -1,0 +1,32 @@
+{
+  "internal_synthetic_core": {
+    "purpose": "Main dataset for the NIRS metrics and architecture comparison.",
+    "target_counts": {
+      "fraud": 40,
+      "suspicious": 20,
+      "safe": 30
+    },
+    "pipeline": [
+      "LLM-generator",
+      "LLM-augmentator",
+      "LLM-validator or manual review",
+      "final dataset"
+    ]
+  },
+  "external_benchmark": {
+    "purpose": "Additional independent testing and discussion.",
+    "source_file": "data/external/synthetic_fraud_dialogues_ru_v1.csv",
+    "role": "Not the core internally generated dataset."
+  },
+  "audio_subsets": {
+    "synthetic_tts_minimum": {
+      "fraud": 8,
+      "suspicious": 4,
+      "safe": 8
+    },
+    "real_audio_validation": {
+      "target_count": "3-4",
+      "role": "Qualitative validation only"
+    }
+  }
+}
