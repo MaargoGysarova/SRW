@@ -8,7 +8,7 @@ from .classifiers import MODELS, load_jsonl
 from .metrics import compute_classification_metrics
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 GENERATOR_INPUT_PATH = ROOT / "data" / "01_generator" / "outputs" / "internal_generated_candidates_v0.jsonl"
 AUGMENTATION_INPUT_PATH = ROOT / "data" / "02_augmentator" / "outputs" / "augmentation_subset_v0.jsonl"
 OUTPUT_DIR = ROOT / "outputs"
@@ -120,7 +120,6 @@ def run() -> tuple[list[dict], list[dict]]:
                     y_true,
                     y_pred,
                     latency_ms_avg=sum(latencies_ms) / len(latencies_ms) if latencies_ms else 0.0,
-                    cost_usd_estimate=0.0,
                 )
             )
             metrics_rows.append(metric_row)

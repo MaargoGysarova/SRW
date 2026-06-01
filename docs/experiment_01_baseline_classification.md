@@ -30,7 +30,6 @@
 ## Дополнительные метрики
 
 - `latency_ms_avg`
-- `cost_usd_estimate`
 - `false_positives`
 - `false_negatives`
 
@@ -46,4 +45,3 @@
 - `false_positives`
 - `false_negatives`
 - `latency_ms_avg`
-- `cost_usd_estimate`

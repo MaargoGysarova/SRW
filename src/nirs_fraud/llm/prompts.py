@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .taxonomy import signal_ids
+from ..catalog.taxonomy import signal_ids
 
 
 QWEN_JSON_RULES = """
@@ -154,6 +154,21 @@ ENSEMBLE_PROMPT = """
 """
 
 
+CLASSIFICATION_JSON_RULES = """
+Критически важно:
+- Верни только один JSON-объект.
+- Не используй markdown и code fences.
+- Не добавляй пояснения вне JSON.
+- Используй схему:
+{
+  "label": "fraud|suspicious|safe",
+  "fraud_score": 0.0,
+  "signals": ["canonical_signal_id"],
+  "explanation": "краткое объяснение"
+}
+""".strip()
+
+
 def format_generator_prompt(seed_brief: dict) -> str:
     return (
         GENERATOR_PROMPT.strip()
@@ -210,4 +225,25 @@ def format_validator_prompt(record: dict) -> str:
         + "- `ok`, если всё соответствует;\n"
         + "- `warning`, если пример пограничный, но потенциально пригоден;\n"
         + "- `fail`, если пример не должен попадать в датасет."
+    )
+
+
+def format_classification_prompt(text: str, mode: str) -> str:
+    prompt_map = {
+        "single_llm": SINGLE_LLM_PROMPT,
+        "llm_checklist": CHECKLIST_PROMPT,
+        "llm_self_check": SELF_CHECK_PROMPT,
+        "llm_ensemble": ENSEMBLE_PROMPT,
+    }
+    if mode not in prompt_map:
+        raise ValueError(f"Unsupported classification mode: {mode}")
+    return (
+        prompt_map[mode].strip()
+        + "\n\n"
+        + CLASSIFICATION_JSON_RULES
+        + "\n\n"
+        + "Диалог:\n"
+        + text.strip()
+        + "\n\n"
+        + "Верни только один JSON-объект."
     )

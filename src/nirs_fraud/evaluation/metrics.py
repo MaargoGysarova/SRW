@@ -15,7 +15,6 @@ METRICS: tuple[MetricDefinition, ...] = (
     MetricDefinition("recall_fraud", "полнота по fraud-классу"),
     MetricDefinition("f1_fraud", "F1-score по fraud-классу"),
     MetricDefinition("latency_ms_avg", "среднее время обработки одного примера в миллисекундах"),
-    MetricDefinition("cost_usd_estimate", "оценка стоимости обработки"),
     MetricDefinition("false_positives", "число ложных срабатываний по fraud-классу"),
     MetricDefinition("false_negatives", "число пропущенных fraud-примеров"),
 )
@@ -31,7 +30,6 @@ def compute_classification_metrics(
     *,
     positive_label: str = "fraud",
     latency_ms_avg: float,
-    cost_usd_estimate: float,
 ) -> dict[str, float]:
     total = len(y_true)
     correct = sum(1 for truth, pred in zip(y_true, y_pred) if truth == pred)
@@ -47,7 +45,6 @@ def compute_classification_metrics(
         "recall_fraud": round(recall, 3),
         "f1_fraud": round(f1, 3),
         "latency_ms_avg": round(latency_ms_avg, 3),
-        "cost_usd_estimate": round(cost_usd_estimate, 6),
         "false_positives": fp,
         "false_negatives": fn,
     }

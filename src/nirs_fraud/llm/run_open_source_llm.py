@@ -9,7 +9,7 @@ from pathlib import Path
 from .prompts import format_augmentator_prompt, format_generator_prompt, format_validator_prompt
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 GENERATOR_SEEDS_PATH = ROOT / "data" / "01_generator" / "seed_briefs" / "generation_seed_briefs.jsonl"
 GENERATOR_REQUESTS_DIR = ROOT / "data" / "01_generator" / "requests"
 GENERATOR_OUTPUTS_DIR = ROOT / "data" / "01_generator" / "outputs"

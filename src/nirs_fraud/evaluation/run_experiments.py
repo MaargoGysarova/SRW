@@ -7,7 +7,7 @@ from pathlib import Path
 from .classifiers import MODELS, load_jsonl
 from .metrics import compute_classification_metrics
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 DATASET_PATH = ROOT / "data" / "04_final_dataset" / "internal_synthetic_core_v0.jsonl"
 OUTPUT_DIR = ROOT / "outputs"
 
@@ -46,7 +46,6 @@ def run() -> tuple[list[dict], list[dict]]:
                 y_true,
                 y_pred,
                 latency_ms_avg=sum(latencies_ms) / len(latencies_ms) if latencies_ms else 0.0,
-                cost_usd_estimate=0.0,
             )
         )
         metrics_rows.append(metric_row)

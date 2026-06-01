@@ -21,10 +21,6 @@
       "description_ru": "среднее время обработки одного примера в миллисекундах"
     },
     {
-      "id": "cost_usd_estimate",
-      "description_ru": "оценка стоимости обработки"
-    },
-    {
       "id": "false_positives",
       "description_ru": "число ложных срабатываний по fraud-классу"
     },

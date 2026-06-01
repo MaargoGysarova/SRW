@@ -11,18 +11,15 @@ Baseline-репозиторий для НИРС по теме выявления
 - `data/04_final_dataset/` — итоговый внутренний датасет для экспериментов.
 - `data/05_external_benchmark/` — внешний benchmark отдельно от основного датасета.
 - `data/06_audio/` — реальные и синтетические аудио.
-- `src/nirs_fraud/build_dataset.py` — сборка артефактов по этапам pipeline.
-- `src/nirs_fraud/taxonomy.py` — единый модуль таксономии сценариев, сигналов и архитектур.
-- `src/nirs_fraud/metrics.py` — определения и расчёт метрик для экспериментов.
-- `src/nirs_fraud/experiment_design.py` — спецификации архитектур и экспериментов.
-- `src/nirs_fraud/export_taxonomy.py` — экспорт таксономии в `data/00_specs/`.
-- `src/nirs_fraud/run_open_source_llm.py` — универсальный раннер для generator / augmentator / validator через open-source LLM.
-- `src/nirs_fraud/validate_dataset.py` — проверка структуры и сигналов в датасете.
-- `src/nirs_fraud/run_experiments.py` — запуск baseline-экспериментов и расчёт метрик.
-- `src/nirs_fraud/prompts.py` — промпты для generator / augmentator / validator / classifier.
+- `src/nirs_fraud/catalog/` — таксономии и каталоги.
+- `src/nirs_fraud/pipeline/` — сборка, очистка и валидация датасета.
+- `src/nirs_fraud/llm/` — промпты и раннеры для моделей.
+- `src/nirs_fraud/evaluation/` — классификаторы, метрики и экспериментальные раннеры.
+- `src/nirs_fraud/research/` — дизайн экспериментов, гипотезы и экспорт спецификаций.
 - `docs/presentation_outline.md` — структура презентации.
 - `docs/experiment_01_baseline_classification.md` — оформленный текст для базового эксперимента.
 - `docs/experiment_02_augmentation_robustness.md` — оформленный текст для эксперимента на устойчивость.
+- `docs/research_hypotheses_nirs.md` — основные гипотезы для отчёта НИРС.
 - `docs/supervisor_summary.md` — короткое объяснение руководителю.
 - `docs/dataset_methodology.md` — методология сбора данных.
 - `docs/thesis_dataset_section.md` — готовый текст для раздела НИРС про датасет.
@@ -42,8 +39,8 @@ Baseline-репозиторий для НИРС по теме выявления
 
 Важно:
 
-- тексты диалогов больше не хранятся внутри `build_dataset.py`;
-- `build_dataset.py` читает данные из этапных папок и собирает итоговый датасет;
+- тексты диалогов больше не хранятся внутри `pipeline/build_dataset.py`;
+- `pipeline/build_dataset.py` читает данные из этапных папок и собирает итоговый датасет;
 - основной источник внутренних примеров сейчас: `data/01_generator/outputs/internal_generated_candidates_v0.jsonl`.
 - рекомендуемый open-source baseline для генерации сейчас: `Qwen/Qwen2.5-3B-Instruct`.
 
@@ -74,10 +71,10 @@ Baseline-репозиторий для НИРС по теме выявления
 ## Быстрый старт
 
 ```bash
-python3 -m src.nirs_fraud.clean_data
-python3 -m src.nirs_fraud.build_dataset
-python3 -m src.nirs_fraud.validate_dataset
-python3 -m src.nirs_fraud.run_experiments
+python3 -m src.nirs_fraud.pipeline.clean_data
+python3 -m src.nirs_fraud.pipeline.build_dataset
+python3 -m src.nirs_fraud.pipeline.validate_dataset
+python3 -m src.nirs_fraud.evaluation.run_experiments
 ```
 
 Результаты появятся в `outputs/`:

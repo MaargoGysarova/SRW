@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 
 TO_DELETE = [
     ROOT / "data" / "01_generator" / "outputs" / "internal_generated_candidates_v0.csv",

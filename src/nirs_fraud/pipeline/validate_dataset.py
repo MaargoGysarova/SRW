@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 SPECS_DIR = ROOT / "data" / "00_specs"
 FINAL_DIR = ROOT / "data" / "04_final_dataset"
 EXTERNAL_DIR = ROOT / "data" / "05_external_benchmark" / "normalized"

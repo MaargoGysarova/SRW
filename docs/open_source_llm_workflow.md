@@ -14,7 +14,7 @@
 
 Добавлен универсальный раннер:
 
-- [run_open_source_llm.py](/Users/margogusarova/Documents/НИРС/src/nirs_fraud/run_open_source_llm.py)
+- [run_open_source_llm.py](/Users/margogusarova/Documents/НИРС/src/nirs_fraud/llm/run_open_source_llm.py)
 
 Он умеет:
 
@@ -51,9 +51,9 @@
 Сначала можно не запускать модель, а просто экспортировать запросы:
 
 ```bash
-python3 -m src.nirs_fraud.run_open_source_llm generator --backend export
-python3 -m src.nirs_fraud.run_open_source_llm augmentator --backend export
-python3 -m src.nirs_fraud.run_open_source_llm validator --backend export
+python3 -m src.nirs_fraud.llm.run_open_source_llm generator --backend export
+python3 -m src.nirs_fraud.llm.run_open_source_llm augmentator --backend export
+python3 -m src.nirs_fraud.llm.run_open_source_llm validator --backend export
 ```
 
 ## Основной рекомендуемый вариант
@@ -61,7 +61,7 @@ python3 -m src.nirs_fraud.run_open_source_llm validator --backend export
 Пример команды:
 
 ```bash
-python3 -m src.nirs_fraud.run_open_source_llm generator --backend transformers --model Qwen/Qwen2.5-3B-Instruct
+python3 -m src.nirs_fraud.llm.run_open_source_llm generator --backend transformers --model Qwen/Qwen2.5-3B-Instruct
 ```
 
 Текущий основной дефолт в проекте:

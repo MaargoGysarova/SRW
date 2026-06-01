@@ -38,7 +38,7 @@ EXPERIMENT_SPECS: tuple[ExperimentSpec, ...] = (
         question_ru="Как меняется качество классификации при переходе от rules baseline к LLM-подходам?",
         compared_architectures=("rules_baseline", "single_llm", "llm_checklist", "llm_self_check", "llm_ensemble"),
         primary_metrics=("accuracy", "precision_fraud", "recall_fraud", "f1_fraud"),
-        secondary_metrics=("latency_ms_avg", "cost_usd_estimate", "false_positives", "false_negatives"),
+        secondary_metrics=("latency_ms_avg", "false_positives", "false_negatives"),
     ),
     ExperimentSpec(
         id="experiment_02_augmentation_robustness",
@@ -47,7 +47,7 @@ EXPERIMENT_SPECS: tuple[ExperimentSpec, ...] = (
         question_ru="Сохраняет ли модель качество, если мошенник переформулирует фразы или если текст искажается ASR-подобным шумом?",
         compared_architectures=("llm_checklist", "llm_self_check", "llm_ensemble"),
         primary_metrics=("accuracy", "recall_fraud"),
-        secondary_metrics=("false_positives", "false_negatives", "latency_ms_avg", "cost_usd_estimate"),
+        secondary_metrics=("false_positives", "false_negatives", "latency_ms_avg"),
     ),
 )
 

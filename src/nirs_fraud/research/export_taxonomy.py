@@ -3,12 +3,13 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from ..catalog.taxonomy import scenarios_as_json, signals_as_json
+from ..evaluation.metrics import metrics_as_json
 from .experiment_design import architectures_as_json as experiment_architectures_as_json, experiments_as_json
-from .metrics import metrics_as_json
-from .taxonomy import scenarios_as_json, signals_as_json
+from .research_hypotheses import hypotheses_as_json
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 SPECS_DIR = ROOT / "data" / "00_specs"
 
 
@@ -23,6 +24,7 @@ def main() -> None:
     write_json(SPECS_DIR / "architecture_catalog.json", experiment_architectures_as_json())
     write_json(SPECS_DIR / "metrics_catalog.json", metrics_as_json())
     write_json(SPECS_DIR / "experiment_catalog.json", experiments_as_json())
+    write_json(SPECS_DIR / "research_hypotheses_catalog.json", hypotheses_as_json())
     print(f"Exported taxonomy files to {SPECS_DIR}")
 
 

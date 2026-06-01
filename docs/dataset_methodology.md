@@ -78,7 +78,7 @@ LLM-generator
 - нет ли противоречий в сценарии;
 - пригоден ли пример для финального корпуса.
 
-Для этого в проект добавлен скрипт [validate_dataset.py](/Users/margogusarova/Documents/НИРС/src/nirs_fraud/validate_dataset.py).
+Для этого в проект добавлен скрипт [validate_dataset.py](/Users/margogusarova/Documents/НИРС/src/nirs_fraud/pipeline/validate_dataset.py).
 
 ## Роль внешнего CSV
 
