@@ -20,6 +20,7 @@ LLM-generator
 
 2. `augmentation_subset`
    Это отдельный набор для проверки устойчивости к paraphrase, subtle и ASR-noise.
+   Внутри него различаются raw subset, validated subset и rejected augmentations.
 
 3. `external_benchmark`
    Это внешний датасет-пример, который используется не как основной корпус, а как дополнительный тест и материал для обсуждения переносимости.
@@ -67,6 +68,7 @@ LLM-generator
 - `scenario_variation`
 
 Это нужно для эксперимента на устойчивость к переформулировкам и шуму.
+На этом этапе модель сначала формирует `raw augmentation subset`.
 
 ## Validator stage
 
@@ -79,6 +81,10 @@ LLM-generator
 - пригоден ли пример для финального корпуса.
 
 Для этого в проект добавлен скрипт [validate_dataset.py](/Users/margogusarova/Documents/НИРС/src/nirs_fraud/pipeline/validate_dataset.py).
+На стадии validator raw augmentation subset автоматически делится на:
+
+- `validated augmentation subset` — то, что можно использовать в experiment 2;
+- `rejected augmentations` — слабые, почти дублирующие или некачественные аугментации.
 
 ## Роль внешнего CSV
 
@@ -94,7 +100,7 @@ LLM-generator
 Структура данных должна визуально отражать этапы исследования:
 
 - `data/01_generator/` — что было сгенерировано;
-- `data/02_augmentator/` — что было получено после аугментации;
+- `data/02_augmentator/` — raw, validated и rejected аугментации;
 - `data/03_validator/` — что прошло проверку и какие есть отчеты;
 - `data/04_final_dataset/` — что в итоге вошло в основной набор;
 - `data/05_external_benchmark/` — что используется только как внешний тест.

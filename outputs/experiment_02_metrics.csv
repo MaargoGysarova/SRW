@@ -1,0 +1,13 @@
+experiment,model,variant,accuracy,precision_fraud,recall_fraud,f1_fraud,latency_ms_avg,false_positives,false_negatives
+experiment_02_augmentation_robustness,llm_checklist,original,0.4,1.0,0.462,0.632,0.066,0,14
+experiment_02_augmentation_robustness,llm_checklist,paraphrase,0.429,0.917,0.55,0.687,0.032,1,9
+experiment_02_augmentation_robustness,llm_checklist,subtle,0.344,1.0,0.3,0.462,0.057,0,14
+experiment_02_augmentation_robustness,llm_checklist,asr_noise,0.571,1.0,0.667,0.8,0.035,0,1
+experiment_02_augmentation_robustness,llm_self_check,original,0.4,1.0,0.462,0.632,0.031,0,14
+experiment_02_augmentation_robustness,llm_self_check,paraphrase,0.429,0.917,0.55,0.687,0.03,1,9
+experiment_02_augmentation_robustness,llm_self_check,subtle,0.344,1.0,0.3,0.462,0.041,0,14
+experiment_02_augmentation_robustness,llm_self_check,asr_noise,0.571,1.0,0.667,0.8,0.143,0,1
+experiment_02_augmentation_robustness,llm_ensemble,original,0.4,1.0,0.462,0.632,0.385,0,14
+experiment_02_augmentation_robustness,llm_ensemble,paraphrase,0.429,0.917,0.55,0.687,0.465,1,9
+experiment_02_augmentation_robustness,llm_ensemble,subtle,0.344,1.0,0.3,0.462,0.109,0,14
+experiment_02_augmentation_robustness,llm_ensemble,asr_noise,0.571,1.0,0.667,0.8,0.18,0,1

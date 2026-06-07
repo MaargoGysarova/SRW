@@ -96,6 +96,42 @@ SCENARIOS: tuple[ScenarioDefinition, ...] = (
         description_ru="Обещание быстрого дохода и давление на срочный перевод денег.",
         allowed_labels=("fraud",),
     ),
+    ScenarioDefinition(
+        id="government_service_impersonation",
+        title_ru="Госуслуги / госорган",
+        description_ru="Звонящий или сообщение выдают себя за Госуслуги или другой госорган и требуют срочных действий.",
+        allowed_labels=("fraud",),
+    ),
+    ScenarioDefinition(
+        id="marketplace_refund",
+        title_ru="возврат на маркетплейсе",
+        description_ru="Подозрительная схема возврата денег через ссылку, форму или ввод реквизитов вне стандартного процесса.",
+        allowed_labels=("suspicious", "fraud"),
+    ),
+    ScenarioDefinition(
+        id="family_logistics",
+        title_ru="бытовая семейная координация",
+        description_ru="Обычный безопасный диалог о времени, встрече, домашних делах.",
+        allowed_labels=("safe",),
+    ),
+    ScenarioDefinition(
+        id="doctor_appointment",
+        title_ru="запись к врачу",
+        description_ru="Нейтральное напоминание или подтверждение записи к врачу без подозрительных запросов.",
+        allowed_labels=("safe",),
+    ),
+    ScenarioDefinition(
+        id="bank_office_info",
+        title_ru="информация об отделении банка",
+        description_ru="Безопасный информационный банковский диалог без запросов кодов, паролей и переводов.",
+        allowed_labels=("safe",),
+    ),
+    ScenarioDefinition(
+        id="it_support_internal",
+        title_ru="легитимная внутренняя IT-поддержка",
+        description_ru="Безопасный рабочий диалог о технической поддержке без удалённого доступа и передачи секретов.",
+        allowed_labels=("safe",),
+    ),
 )
 
 
@@ -144,3 +180,7 @@ def architectures_as_json() -> dict:
 
 def signal_ids() -> list[str]:
     return [item.id for item in SIGNALS]
+
+
+def scenario_ids() -> list[str]:
+    return [item.id for item in SCENARIOS]

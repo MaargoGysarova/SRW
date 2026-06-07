@@ -24,7 +24,8 @@ EXTERNAL_NORMALIZED_DIR = ROOT / "data" / "05_external_benchmark" / "normalized"
 AUDIO_DIR = ROOT / "data" / "06_audio"
 
 INTERNAL_CANDIDATES_PATH = GENERATOR_OUTPUTS_DIR / "internal_generated_candidates_v0.jsonl"
-AUGMENTATION_SUBSET_PATH = AUGMENTATOR_OUTPUTS_DIR / "augmentation_subset_v0.jsonl"
+RAW_AUGMENTATION_SUBSET_PATH = AUGMENTATOR_OUTPUTS_DIR / "augmentation_subset_v0.jsonl"
+CLEAN_AUGMENTATION_SUBSET_PATH = AUGMENTATOR_OUTPUTS_DIR / "augmentation_subset_clean_v1.jsonl"
 EXTERNAL_BENCHMARK_PATH = EXTERNAL_RAW_DIR / "synthetic_fraud_dialogues_ru_v1.csv"
 
 
@@ -87,6 +88,7 @@ def summarize_rows(rows: list[dict]) -> dict:
 
 
 def build_manifest(internal_rows: list[dict], augmentation_rows: list[dict], external_rows: list[dict]) -> dict:
+    augmentation_path = CLEAN_AUGMENTATION_SUBSET_PATH if CLEAN_AUGMENTATION_SUBSET_PATH.exists() else RAW_AUGMENTATION_SUBSET_PATH
     return {
         "project": "nirs_fraud_dialogs",
         "dataset_logic": [
@@ -101,9 +103,21 @@ def build_manifest(internal_rows: list[dict], augmentation_rows: list[dict], ext
             "summary": summarize_rows(internal_rows),
         },
         "augmentation_subset": {
-            "description": "Robustness subset produced at the augmentator stage.",
-            "source_path": str(AUGMENTATION_SUBSET_PATH.relative_to(ROOT)),
+            "description": "Robustness subset produced at the augmentator stage and filtered during validation.",
+            "source_path": str(augmentation_path.relative_to(ROOT)),
             "count": len(augmentation_rows),
+        },
+        "experiment_datasets": {
+            "experiment_01": {
+                "description": "Main text classification dataset.",
+                "jsonl_path": str((FINAL_DATASET_DIR / "experiment_01_internal_synthetic_core_v0.jsonl").relative_to(ROOT)),
+                "csv_path": str((FINAL_DATASET_DIR / "experiment_01_internal_synthetic_core_v0.csv").relative_to(ROOT)),
+            },
+            "experiment_02": {
+                "description": "Validated augmentation subset for robustness evaluation.",
+                "jsonl_path": str((FINAL_DATASET_DIR / "experiment_02_validated_augmentation_subset_v1.jsonl").relative_to(ROOT)),
+                "csv_path": str((FINAL_DATASET_DIR / "experiment_02_validated_augmentation_subset_v1.csv").relative_to(ROOT)),
+            },
         },
         "external_benchmark": {
             "description": "External example dataset used for additional testing and discussion.",
@@ -169,16 +183,41 @@ def write_validator_report(path: Path, internal_rows: list[dict], augmentation_r
     path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def write_experiment_dataset_index(path: Path, internal_rows: list[dict], augmentation_rows: list[dict]) -> None:
+    payload = {
+        "experiment_01": {
+            "dataset_name": "internal_synthetic_core",
+            "role": "main dataset for baseline text classification",
+            "row_count": len(internal_rows),
+            "jsonl_path": "data/04_final_dataset/experiment_01_internal_synthetic_core_v0.jsonl",
+            "csv_path": "data/04_final_dataset/experiment_01_internal_synthetic_core_v0.csv",
+        },
+        "experiment_02": {
+            "dataset_name": "validated_augmentation_subset",
+            "role": "robustness dataset for paraphrase / subtle / asr_noise evaluation",
+            "row_count": len(augmentation_rows),
+            "jsonl_path": "data/04_final_dataset/experiment_02_validated_augmentation_subset_v1.jsonl",
+            "csv_path": "data/04_final_dataset/experiment_02_validated_augmentation_subset_v1.csv",
+        },
+    }
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def main() -> None:
     ensure_stage_dirs()
     sync_reference_files()
 
     internal_rows = require_jsonl(INTERNAL_CANDIDATES_PATH, "generator")
-    augmentation_rows = require_jsonl(AUGMENTATION_SUBSET_PATH, "augmentator")
+    augmentation_input_path = CLEAN_AUGMENTATION_SUBSET_PATH if CLEAN_AUGMENTATION_SUBSET_PATH.exists() else RAW_AUGMENTATION_SUBSET_PATH
+    augmentation_rows = require_jsonl(augmentation_input_path, "augmentator")
     external_rows = load_external_csv(EXTERNAL_BENCHMARK_PATH) if EXTERNAL_BENCHMARK_PATH.exists() else []
 
     write_jsonl(FINAL_DATASET_DIR / "internal_synthetic_core_v0.jsonl", internal_rows)
     write_csv(FINAL_DATASET_DIR / "internal_synthetic_core_v0.csv", internal_rows)
+    write_jsonl(FINAL_DATASET_DIR / "experiment_01_internal_synthetic_core_v0.jsonl", internal_rows)
+    write_csv(FINAL_DATASET_DIR / "experiment_01_internal_synthetic_core_v0.csv", internal_rows)
+    write_jsonl(FINAL_DATASET_DIR / "experiment_02_validated_augmentation_subset_v1.jsonl", augmentation_rows)
+    write_csv(FINAL_DATASET_DIR / "experiment_02_validated_augmentation_subset_v1.csv", augmentation_rows)
 
     if external_rows:
         write_jsonl(EXTERNAL_NORMALIZED_DIR / "external_benchmark_v1.jsonl", external_rows)
@@ -194,6 +233,11 @@ def main() -> None:
         internal_rows,
         augmentation_rows,
         external_rows,
+    )
+    write_experiment_dataset_index(
+        FINAL_DATASET_DIR / "experiment_dataset_index.json",
+        internal_rows,
+        augmentation_rows,
     )
 
     print(

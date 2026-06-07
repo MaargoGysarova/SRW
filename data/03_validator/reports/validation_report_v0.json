@@ -1,0 +1,11 @@
+{
+  "stage": "validator",
+  "internal_candidate_count": 85,
+  "augmentation_count": 86,
+  "external_benchmark_count": 0,
+  "accepted_to_final_dataset": 85,
+  "notes": [
+    "build_dataset.py не хранит тексты диалогов внутри кода и читает их из этапных папок.",
+    "External benchmark хранится отдельно и не смешивается с internal synthetic core."
+  ]
+}

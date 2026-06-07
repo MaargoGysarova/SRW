@@ -15,7 +15,13 @@
   },
   "external_benchmark": {
     "purpose": "Additional independent testing and discussion.",
-    "source_file": "data/external/synthetic_fraud_dialogues_ru_v1.csv",
+    "source_file": "data/05_external_benchmark/raw/kaggle_scam_non_scam_ru_subset.csv",
+    "source_name": "kaggle_scam_non_scam",
+    "target_counts": {
+      "fraud": 50,
+      "safe": 50
+    },
+    "translation_type": "machine_translated",
     "role": "Not the core internally generated dataset."
   },
   "audio_subsets": {

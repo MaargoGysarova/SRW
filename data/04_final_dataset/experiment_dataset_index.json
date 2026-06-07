@@ -1,0 +1,16 @@
+{
+  "experiment_01": {
+    "dataset_name": "internal_synthetic_core",
+    "role": "main dataset for baseline text classification",
+    "row_count": 85,
+    "jsonl_path": "data/04_final_dataset/experiment_01_internal_synthetic_core_v0.jsonl",
+    "csv_path": "data/04_final_dataset/experiment_01_internal_synthetic_core_v0.csv"
+  },
+  "experiment_02": {
+    "dataset_name": "validated_augmentation_subset",
+    "role": "robustness dataset for paraphrase / subtle / asr_noise evaluation",
+    "row_count": 86,
+    "jsonl_path": "data/04_final_dataset/experiment_02_validated_augmentation_subset_v1.jsonl",
+    "csv_path": "data/04_final_dataset/experiment_02_validated_augmentation_subset_v1.csv"
+  }
+}

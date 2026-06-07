@@ -1,0 +1,61 @@
+{
+  "project": "nirs_fraud_dialogs",
+  "dataset_logic": [
+    "LLM-generator",
+    "LLM-augmentator",
+    "LLM-validator or manual review",
+    "final dataset"
+  ],
+  "internal_synthetic_core": {
+    "description": "Accepted output of the internal generator/validator pipeline.",
+    "source_path": "data/01_generator/outputs/internal_generated_candidates_v0.jsonl",
+    "summary": {
+      "total_examples": 85,
+      "label_counts": {
+        "fraud": 35,
+        "suspicious": 20,
+        "safe": 30
+      },
+      "scenario_counts": {
+        "bank_security_call": 6,
+        "fake_loan_application": 5,
+        "safe_account_transfer": 4,
+        "fake_police_call": 4,
+        "relative_emergency": 4,
+        "fake_support_app_install": 4,
+        "government_service_impersonation": 4,
+        "investment_scam": 4,
+        "fake_delivery": 6,
+        "phone_number_extension": 5,
+        "voting_link_phishing": 5,
+        "marketplace_refund": 4,
+        "family_logistics": 8,
+        "doctor_appointment": 7,
+        "bank_office_info": 7,
+        "it_support_internal": 8
+      }
+    }
+  },
+  "augmentation_subset": {
+    "description": "Robustness subset produced at the augmentator stage and filtered during validation.",
+    "source_path": "data/02_augmentator/outputs/augmentation_subset_clean_v1.jsonl",
+    "count": 86
+  },
+  "experiment_datasets": {
+    "experiment_01": {
+      "description": "Main text classification dataset.",
+      "jsonl_path": "data/04_final_dataset/experiment_01_internal_synthetic_core_v0.jsonl",
+      "csv_path": "data/04_final_dataset/experiment_01_internal_synthetic_core_v0.csv"
+    },
+    "experiment_02": {
+      "description": "Validated augmentation subset for robustness evaluation.",
+      "jsonl_path": "data/04_final_dataset/experiment_02_validated_augmentation_subset_v1.jsonl",
+      "csv_path": "data/04_final_dataset/experiment_02_validated_augmentation_subset_v1.csv"
+    }
+  },
+  "external_benchmark": {
+    "description": "External example dataset used for additional testing and discussion.",
+    "source_path": null,
+    "summary": null
+  }
+}

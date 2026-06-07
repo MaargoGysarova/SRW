@@ -4,13 +4,11 @@ import csv
 import time
 from pathlib import Path
 
-from .classifiers import MODELS, load_jsonl
+from .classifiers import MODELS
+from .datasets import ROOT, build_experiment_02_variant_rows
 from .metrics import compute_classification_metrics
+from .progress import finish_progress, render_progress
 
-
-ROOT = Path(__file__).resolve().parents[3]
-GENERATOR_INPUT_PATH = ROOT / "data" / "01_generator" / "outputs" / "internal_generated_candidates_v0.jsonl"
-AUGMENTATION_INPUT_PATH = ROOT / "data" / "02_augmentator" / "outputs" / "augmentation_subset_v0.jsonl"
 OUTPUT_DIR = ROOT / "outputs"
 
 TARGET_MODELS = ("llm_checklist", "llm_self_check", "llm_ensemble")
@@ -24,54 +22,8 @@ def write_csv(path: Path, rows: list[dict]) -> None:
         writer.writerows(rows)
 
 
-def require_jsonl(path: Path, label: str) -> list[dict]:
-    if not path.exists():
-        raise FileNotFoundError(
-            f"{label} file not found: {path}. "
-            "Сначала нужно получить данные генератора и аугментатора."
-        )
-    return load_jsonl(path)
-
-
 def build_variant_rows() -> list[dict]:
-    original_rows = require_jsonl(GENERATOR_INPUT_PATH, "generator output")
-    augmentation_rows = require_jsonl(AUGMENTATION_INPUT_PATH, "augmentation output")
-    originals_by_id = {row["id"]: row for row in original_rows}
-
-    combined = []
-    for aug in augmentation_rows:
-        base_id = aug["base_id"]
-        aug_type = aug["augmentation_type"]
-        if aug_type not in TARGET_VARIANTS[1:]:
-            continue
-        base = originals_by_id.get(base_id)
-        if base is None:
-            continue
-        combined.append(
-            {
-                "variant": "original",
-                "sample_id": base["id"],
-                "base_id": base["id"],
-                "label": base["label"],
-                "scenario": base["scenario"],
-                "text": base["text"],
-            }
-        )
-        combined.append(
-            {
-                "variant": aug_type,
-                "sample_id": aug["id"],
-                "base_id": base["id"],
-                "label": aug["label"],
-                "scenario": base["scenario"],
-                "text": aug["text"],
-            }
-        )
-
-    deduped = {}
-    for row in combined:
-        deduped[(row["variant"], row["sample_id"])] = row
-    return list(deduped.values())
+    return build_experiment_02_variant_rows(variants=TARGET_VARIANTS[1:])
 
 
 def run() -> tuple[list[dict], list[dict]]:
@@ -88,7 +40,9 @@ def run() -> tuple[list[dict], list[dict]]:
             y_true = []
             y_pred = []
             latencies_ms = []
-            for row in subset:
+            total_rows = len(subset)
+            render_progress(f"exp2:{model_name}:{variant}", completed=0, total=total_rows)
+            for row_index, row in enumerate(subset, start=1):
                 started = time.perf_counter()
                 label, signals, score = model_fn(row["text"])
                 elapsed_ms = (time.perf_counter() - started) * 1000
@@ -109,6 +63,8 @@ def run() -> tuple[list[dict], list[dict]]:
                         "latency_ms": round(elapsed_ms, 3),
                     }
                 )
+                render_progress(f"exp2:{model_name}:{variant}", completed=row_index, total=total_rows)
+            finish_progress()
 
             metric_row = {
                 "experiment": "experiment_02_augmentation_robustness",

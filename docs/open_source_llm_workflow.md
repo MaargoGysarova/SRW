@@ -38,7 +38,9 @@
 
 - вход: `data/01_generator/outputs/internal_generated_candidates_v0.jsonl`
 - запросы: `data/02_augmentator/requests/augmentator_requests_v0.jsonl`
-- ответы модели: `data/02_augmentator/outputs/augmentation_subset_v0.jsonl`
+- raw ответы модели: `data/02_augmentator/outputs/augmentation_subset_v0.jsonl`
+- validated subset после фильтрации: `data/02_augmentator/outputs/augmentation_subset_clean_v1.jsonl`
+- rejected augmentations: `data/02_augmentator/outputs/augmentation_subset_rejected_v1.jsonl`
 
 ### Validator
 

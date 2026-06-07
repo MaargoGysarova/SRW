@@ -6,10 +6,10 @@ Baseline-репозиторий для НИРС по теме выявления
 
 - `data/00_specs/` — спецификации сценариев, сигналов и плана датасета.
 - `data/01_generator/` — seed-брифы и выходы генератора.
-- `data/02_augmentator/` — выходы аугментации.
+- `data/02_augmentator/` — сырые, валидированные и отбракованные аугментации.
 - `data/03_validator/` — manifest и отчёты валидации.
 - `data/04_final_dataset/` — итоговый внутренний датасет для экспериментов.
-- `data/05_external_benchmark/` — внешний benchmark отдельно от основного датасета.
+- `data/05_external_benchmark/` — внешний benchmark отдельно от основного датасета, сейчас под Kaggle subset.
 - `data/06_audio/` — реальные и синтетические аудио.
 - `src/nirs_fraud/catalog/` — таксономии и каталоги.
 - `src/nirs_fraud/pipeline/` — сборка, очистка и валидация датасета.
@@ -23,6 +23,7 @@ Baseline-репозиторий для НИРС по теме выявления
 - `docs/supervisor_summary.md` — короткое объяснение руководителю.
 - `docs/dataset_methodology.md` — методология сбора данных.
 - `docs/thesis_dataset_section.md` — готовый текст для раздела НИРС про датасет.
+- `docs/external_kaggle_benchmark.md` — схема внешнего Kaggle benchmark.
 
 ## Честная граница текущей версии
 
@@ -51,6 +52,7 @@ Baseline-репозиторий для НИРС по теме выявления
 Для НИРС теперь различаются два набора:
 
 - `internal_synthetic_core` — основной внутренний датасет;
+- `validated_augmentation_subset` — валидированный набор аугментаций для эксперимента на устойчивость;
 - `external_benchmark` — внешний датасет для дополнительного теста.
 
 И они лежат в отдельных этапных папках:
@@ -61,6 +63,12 @@ Baseline-репозиторий для НИРС по теме выявления
 - итоговый датасет: `data/04_final_dataset/`
 - внешний benchmark: `data/05_external_benchmark/`
 - аудио: `data/06_audio/`
+
+Для аугментаций внутри `data/02_augmentator/` используются три состояния:
+
+- `augmentation_subset_v0.jsonl` — raw augmentation subset;
+- `augmentation_subset_clean_v1.jsonl` — validated augmentation subset;
+- `augmentation_subset_rejected_v1.jsonl` — rejected augmentations.
 
 Целевой баланс внутреннего core:
 
