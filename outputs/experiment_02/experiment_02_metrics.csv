@@ -1,0 +1,7 @@
+experiment,model,variant,accuracy,precision_fraud,recall_fraud,f1_fraud,latency_ms_avg,false_positives,false_negatives
+experiment_02_augmentation_robustness,rules_baseline,original,0.471,0.833,0.571,0.678,0.129,4,15
+experiment_02_augmentation_robustness,rules_baseline,paraphrase,0.429,0.826,0.543,0.655,0.078,4,16
+experiment_02_augmentation_robustness,rules_baseline,subtle,0.4,0.857,0.514,0.643,0.081,3,17
+experiment_02_augmentation_robustness,rules_baseline,asr_noise,0.082,1.0,0.062,0.118,0.078,0,30
+experiment_02_augmentation_robustness,rules_baseline,all_augmented,0.322,0.848,0.382,0.527,0.079,7,63
+experiment_02_augmentation_robustness,rules_baseline,all_variants,0.365,0.843,0.431,0.57,0.093,11,78

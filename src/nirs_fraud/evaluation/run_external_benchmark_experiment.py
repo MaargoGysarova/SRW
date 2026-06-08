@@ -9,7 +9,7 @@ from .datasets import ROOT, load_experiment_03_rows
 from .metrics import compute_classification_metrics
 from .progress import finish_progress, render_progress
 
-OUTPUT_DIR = ROOT / "outputs"
+OUTPUT_DIR = ROOT / "outputs" / "experiment_03"
 
 
 def write_csv(path: Path, rows: list[dict]) -> None:

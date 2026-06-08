@@ -1,6 +1,0 @@
-experiment,model,accuracy,precision_fraud,recall_fraud,f1_fraud,latency_ms_avg,false_positives,false_negatives
-experiment_03_external_benchmark,rules_baseline,0.525,1.0,0.133,0.235,0.098,0,26
-experiment_03_external_benchmark,single_llm,0.525,1.0,0.133,0.235,0.055,0,26
-experiment_03_external_benchmark,llm_checklist,0.525,1.0,0.033,0.065,0.057,0,29
-experiment_03_external_benchmark,llm_self_check,0.525,1.0,0.033,0.065,0.058,0,29
-experiment_03_external_benchmark,llm_ensemble,0.525,1.0,0.033,0.065,0.17,0,29

@@ -1,0 +1,7 @@
+experiment,model,architecture,variant,accuracy,precision_fraud,recall_fraud,f1_fraud,latency_ms_avg,false_positives,false_negatives
+experiment_02_augmentation_robustness,Qwen/Qwen2.5-14B-Instruct,single_llm,original,0.8,0.938,0.857,0.896,2358.559,2,5
+experiment_02_augmentation_robustness,Qwen/Qwen2.5-14B-Instruct,single_llm,paraphrase,0.771,0.909,0.857,0.882,2118.102,3,5
+experiment_02_augmentation_robustness,Qwen/Qwen2.5-14B-Instruct,single_llm,subtle,0.691,0.893,0.714,0.794,2348.317,3,10
+experiment_02_augmentation_robustness,Qwen/Qwen2.5-14B-Instruct,single_llm,asr_noise,0.816,0.963,0.812,0.881,2347.197,1,6
+experiment_02_augmentation_robustness,Qwen/Qwen2.5-14B-Instruct,single_llm,all_augmented,0.759,0.92,0.794,0.853,2255.386,7,21
+experiment_02_augmentation_robustness,Qwen/Qwen2.5-14B-Instruct,single_llm,all_variants,0.77,0.925,0.81,0.864,2284.985,9,26

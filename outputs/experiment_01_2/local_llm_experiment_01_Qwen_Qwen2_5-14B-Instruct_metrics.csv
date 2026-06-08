@@ -1,0 +1,5 @@
+experiment,model,architecture,accuracy,precision_fraud,recall_fraud,f1_fraud,latency_ms_avg,false_positives,false_negatives
+experiment_01_internal_synthetic_core,Qwen/Qwen2.5-14B-Instruct,single_llm,0.835,0.938,0.857,0.896,2154.699,2,5
+experiment_01_internal_synthetic_core,Qwen/Qwen2.5-14B-Instruct,llm_checklist,0.824,0.789,0.857,0.822,1999.867,8,5
+experiment_01_internal_synthetic_core,Qwen/Qwen2.5-14B-Instruct,llm_self_check,0.753,0.75,0.943,0.835,2208.065,11,2
+experiment_01_internal_synthetic_core,Qwen/Qwen2.5-14B-Instruct,llm_ensemble,0.812,0.775,0.886,0.827,2514.185,9,4

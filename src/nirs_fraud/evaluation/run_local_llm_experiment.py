@@ -17,7 +17,7 @@ from .metrics import compute_classification_metrics
 from .progress import finish_progress, render_progress
 
 
-OUTPUT_DIR = ROOT / "outputs"
+OUTPUT_DIR = ROOT / "outputs" / "experiment_01"
 DEFAULT_ARCHITECTURES = ("single_llm", "llm_checklist", "llm_self_check", "llm_ensemble")
 
 
@@ -33,6 +33,25 @@ def write_summary(path: Path, metrics_rows: list[dict]) -> None:
             f"| {row['model']} | {row['architecture']} | {row['accuracy']:.3f} | {row['precision_fraud']:.3f} | {row['recall_fraud']:.3f} | {row['f1_fraud']:.3f} | {row['false_positives']} | {row['false_negatives']} |"
         )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_per_architecture_outputs(output_dir: Path, model_slug: str, predictions: list[dict], metrics_rows: list[dict]) -> None:
+    architectures = sorted({row["architecture"] for row in metrics_rows})
+    for architecture in architectures:
+        architecture_predictions = [row for row in predictions if row["architecture"] == architecture]
+        architecture_metrics = [row for row in metrics_rows if row["architecture"] == architecture]
+        write_csv(
+            output_dir / f"local_llm_experiment_01_{model_slug}_{architecture}_predictions.csv",
+            architecture_predictions,
+        )
+        write_csv(
+            output_dir / f"local_llm_experiment_01_{model_slug}_{architecture}_metrics.csv",
+            architecture_metrics,
+        )
+        write_summary(
+            output_dir / f"local_llm_experiment_01_{model_slug}_{architecture}_summary.md",
+            architecture_metrics,
+        )
 
 
 def run(
@@ -125,6 +144,7 @@ def main() -> None:
     write_csv(OUTPUT_DIR / f"local_llm_experiment_01_{model_slug}_predictions.csv", predictions)
     write_csv(OUTPUT_DIR / f"local_llm_experiment_01_{model_slug}_metrics.csv", metrics_rows)
     write_summary(OUTPUT_DIR / f"local_llm_experiment_01_{model_slug}_summary.md", metrics_rows)
+    write_per_architecture_outputs(OUTPUT_DIR, model_slug, predictions, metrics_rows)
     print(
         f"Wrote {len(predictions)} local LLM experiment 01 predictions and "
         f"{len(metrics_rows)} metric rows for model={args.model}"

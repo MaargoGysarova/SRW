@@ -1,7 +1,7 @@
 {
   "stage": "validator",
   "internal_candidate_count": 85,
-  "augmentation_count": 86,
+  "augmentation_count": 187,
   "external_benchmark_count": 0,
   "accepted_to_final_dataset": 85,
   "notes": [

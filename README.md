@@ -32,8 +32,7 @@ Baseline-репозиторий для НИРС по теме выявления
 - собрать артефакты по отдельным этапам `generator -> augmentator -> validator -> final dataset`;
 - собрать внутренний synthetic core и отдельно оформить внешний benchmark;
 - описать pipeline `generator -> augmentator -> validator -> final dataset`;
-- прогнать rule-based baseline;
-- прогнать checklist/self-check/ensemble proxy-классификаторы без внешнего API;
+- прогнать rule-based baseline без внешнего API;
 - получить `predictions.csv` и `metrics.csv`;
 - использовать готовые промпты для реального LLM-запуска позже.
 - экспортировать jobs для open-source LLM или запускать их через прямую загрузку модели в `transformers`.
@@ -45,7 +44,7 @@ Baseline-репозиторий для НИРС по теме выявления
 - основной источник внутренних примеров сейчас: `data/01_generator/outputs/internal_generated_candidates_v0.jsonl`.
 - рекомендуемый open-source baseline для генерации сейчас: `Qwen/Qwen2.5-3B-Instruct`.
 
-Пока без сетевого доступа здесь **не выполняются реальные вызовы внешней LLM**. Поэтому `single_llm`, `llm_checklist`, `llm_self_check` и `llm_ensemble` в коде сейчас представлены как **proxy-версии baseline-логики**, а промпты и интерфейс вынесены отдельно для дальнейшего подключения API.
+Без внешнего API в репозитории остаётся только `rules_baseline` как простой контрольный baseline. Реальные LLM-прогоны теперь запускаются отдельно через локальные `transformers`-раннеры.
 
 ## Структура данных
 

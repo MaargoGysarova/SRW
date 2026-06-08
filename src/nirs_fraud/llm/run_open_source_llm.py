@@ -23,7 +23,7 @@ VALIDATOR_REQUESTS_DIR = ROOT / "data" / "03_validator" / "requests"
 VALIDATOR_OUTPUTS_DIR = ROOT / "data" / "03_validator" / "outputs"
 VALIDATOR_FAILED_DIR = ROOT / "data" / "03_validator" / "failed"
 DEFAULT_GENERATOR_MODEL = "Qwen/Qwen2.5-3B-Instruct"
-DEFAULT_AUGMENTATOR_MODEL = "Qwen/Qwen3-30B-A3B-Instruct-2507"
+DEFAULT_AUGMENTATOR_MODEL = "Qwen/Qwen2.5-14B-Instruct"
 DEFAULT_VALIDATOR_MODEL = "Qwen/Qwen2.5-3B-Instruct"
 DEFAULT_MAX_NEW_TOKENS = 700
 DEFAULT_TEMPERATURE = 0.2
@@ -352,6 +352,11 @@ def validate_augmentator_record(record: dict, request: dict) -> None:
     metadata = request["metadata"]
     source_text = ensure_string(metadata.get("source_text")).strip()
     generated_text = record["text"].strip()
+    source_signals = [
+        signal
+        for signal in metadata.get("source_signals", [])
+        if signal in CANONICAL_SIGNAL_IDS
+    ]
 
     if not generated_text:
         raise ValueError("augmentator generated empty text")
@@ -376,7 +381,7 @@ def validate_augmentator_record(record: dict, request: dict) -> None:
         if token_diff_count < 2:
             raise ValueError("asr_noise is too close to the original text")
 
-    if not record["preserved_signals"]:
+    if source_signals and not record["preserved_signals"]:
         raise ValueError("augmentator returned no preserved signals")
 
     lowered = generated_text.lower()
@@ -701,11 +706,13 @@ def run_stage(stage: str, backend_name: str, model: str, max_new_tokens: int, te
     for request_index, request in enumerate(requests, start=1):
         last_exc = None
         last_preview = ""
+        last_raw_completion = ""
         for attempt_index in range(max_attempts):
             prompt = request["prompt"]
             if last_exc is not None:
                 prompt = build_retry_prompt(stage, request, str(last_exc), attempt_index + 1)
             raw_completion = backend.complete(prompt, model)
+            last_raw_completion = raw_completion
             try:
                 normalized = postprocess_model_output(stage, request, raw_completion)
                 outputs.append(normalized)
@@ -721,6 +728,7 @@ def run_stage(stage: str, backend_name: str, model: str, max_new_tokens: int, te
                     "error": str(last_exc) if last_exc else "unknown_error",
                     "attempts": max_attempts,
                     "raw_output_preview": last_preview,
+                    "raw_output": last_raw_completion,
                     "base_id": request.get("base_id"),
                     "metadata": request.get("metadata", {}),
                 }

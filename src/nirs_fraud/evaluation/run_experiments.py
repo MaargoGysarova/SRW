@@ -9,7 +9,7 @@ from .datasets import ROOT, load_experiment_01_rows
 from .metrics import compute_classification_metrics
 from .progress import finish_progress, render_progress
 
-OUTPUT_DIR = ROOT / "outputs"
+OUTPUT_DIR = ROOT / "outputs" / "experiment_01"
 
 
 def run() -> tuple[list[dict], list[dict]]:

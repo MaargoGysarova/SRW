@@ -9,7 +9,7 @@
   "experiment_02": {
     "dataset_name": "validated_augmentation_subset",
     "role": "robustness dataset for paraphrase / subtle / asr_noise evaluation",
-    "row_count": 86,
+    "row_count": 187,
     "jsonl_path": "data/04_final_dataset/experiment_02_validated_augmentation_subset_v1.jsonl",
     "csv_path": "data/04_final_dataset/experiment_02_validated_augmentation_subset_v1.csv"
   }

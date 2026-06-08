@@ -1,14 +1,14 @@
 {
-  "raw_count": 114,
-  "accepted_count": 86,
-  "rejected_count": 28,
+  "raw_count": 188,
+  "accepted_count": 187,
+  "rejected_count": 1,
   "accepted_by_type": {
-    "asr_noise": 24,
-    "paraphrase": 30,
-    "subtle": 32
+    "asr_noise": 49,
+    "paraphrase": 70,
+    "scenario_variation": 13,
+    "subtle": 55
   },
   "rejected_by_reason": {
-    "too_similar_paraphrase": 16,
-    "too_similar_subtle": 12
+    "too_similar_asr_noise": 1
   }
 }

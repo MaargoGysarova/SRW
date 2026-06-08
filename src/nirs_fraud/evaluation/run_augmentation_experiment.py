@@ -9,9 +9,9 @@ from .datasets import ROOT, build_experiment_02_variant_rows
 from .metrics import compute_classification_metrics
 from .progress import finish_progress, render_progress
 
-OUTPUT_DIR = ROOT / "outputs"
+OUTPUT_DIR = ROOT / "outputs" / "experiment_02"
 
-TARGET_MODELS = ("llm_checklist", "llm_self_check", "llm_ensemble")
+TARGET_MODELS = ("rules_baseline",)
 TARGET_VARIANTS = ("original", "paraphrase", "subtle", "asr_noise")
 
 
@@ -33,6 +33,7 @@ def run() -> tuple[list[dict], list[dict]]:
 
     for model_name in TARGET_MODELS:
         model_fn = MODELS[model_name]
+        grouped_predictions: dict[str, list[dict]] = {variant: [] for variant in TARGET_VARIANTS}
         for variant in TARGET_VARIANTS:
             subset = [row for row in rows if row["variant"] == variant]
             if not subset:
@@ -63,6 +64,13 @@ def run() -> tuple[list[dict], list[dict]]:
                         "latency_ms": round(elapsed_ms, 3),
                     }
                 )
+                grouped_predictions[variant].append(
+                    {
+                        "true_label": row["label"],
+                        "predicted_label": label,
+                        "latency_ms": elapsed_ms,
+                    }
+                )
                 render_progress(f"exp2:{model_name}:{variant}", completed=row_index, total=total_rows)
             finish_progress()
 
@@ -80,6 +88,49 @@ def run() -> tuple[list[dict], list[dict]]:
             )
             metrics_rows.append(metric_row)
 
+        augmented_rows = []
+        all_rows = []
+        for variant_name, records in grouped_predictions.items():
+            if variant_name != "original":
+                augmented_rows.extend(records)
+            all_rows.extend(records)
+
+        if augmented_rows:
+            metrics_rows.append(
+                {
+                    "experiment": "experiment_02_augmentation_robustness",
+                    "model": model_name,
+                    "variant": "all_augmented",
+                    **compute_classification_metrics(
+                        [row["true_label"] for row in augmented_rows],
+                        [row["predicted_label"] for row in augmented_rows],
+                        latency_ms_avg=(
+                            sum(row["latency_ms"] for row in augmented_rows) / len(augmented_rows)
+                            if augmented_rows
+                            else 0.0
+                        ),
+                    ),
+                }
+            )
+
+        if all_rows:
+            metrics_rows.append(
+                {
+                    "experiment": "experiment_02_augmentation_robustness",
+                    "model": model_name,
+                    "variant": "all_variants",
+                    **compute_classification_metrics(
+                        [row["true_label"] for row in all_rows],
+                        [row["predicted_label"] for row in all_rows],
+                        latency_ms_avg=(
+                            sum(row["latency_ms"] for row in all_rows) / len(all_rows)
+                            if all_rows
+                            else 0.0
+                        ),
+                    ),
+                }
+            )
+
     return predictions, metrics_rows
 
 
@@ -87,12 +138,12 @@ def write_summary(path: Path, rows: list[dict]) -> None:
     lines = [
         "# Experiment 2 Summary",
         "",
-        "| Model | Variant | Accuracy | Recall fraud | FP | FN |",
-        "|---|---|---:|---:|---:|---:|",
+        "| Model | Variant | Accuracy | Precision fraud | Recall fraud | F1 fraud | FP | FN |",
+        "|---|---|---:|---:|---:|---:|---:|---:|",
     ]
     for row in rows:
         lines.append(
-            f"| {row['model']} | {row['variant']} | {row['accuracy']:.3f} | {row['recall_fraud']:.3f} | {row['false_positives']} | {row['false_negatives']} |"
+            f"| {row['model']} | {row['variant']} | {row['accuracy']:.3f} | {row['precision_fraud']:.3f} | {row['recall_fraud']:.3f} | {row['f1_fraud']:.3f} | {row['false_positives']} | {row['false_negatives']} |"
         )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 

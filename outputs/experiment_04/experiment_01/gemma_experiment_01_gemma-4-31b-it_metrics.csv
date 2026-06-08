@@ -1,0 +1,2 @@
+experiment,model,architecture,accuracy,precision_fraud,recall_fraud,f1_fraud,latency_ms_avg,false_positives,false_negatives
+experiment_01_internal_synthetic_core,gemma-4-31b-it,single_llm,0.647,0.676,0.714,0.694,23226.014,12,10

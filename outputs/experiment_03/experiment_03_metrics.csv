@@ -1,0 +1,2 @@
+experiment,model,accuracy,precision_fraud,recall_fraud,f1_fraud,latency_ms_avg,false_positives,false_negatives
+experiment_03_external_benchmark,rules_baseline,0.525,1.0,0.133,0.235,0.13,0,26

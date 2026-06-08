@@ -39,7 +39,7 @@
   "augmentation_subset": {
     "description": "Robustness subset produced at the augmentator stage and filtered during validation.",
     "source_path": "data/02_augmentator/outputs/augmentation_subset_clean_v1.jsonl",
-    "count": 86
+    "count": 187
   },
   "experiment_datasets": {
     "experiment_01": {
