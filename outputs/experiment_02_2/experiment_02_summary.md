@@ -1,10 +1,49 @@
-# Experiment 2 Summary
+# Эксперимент 2. Устойчивость к аугментациям
 
-| Model | Variant | Accuracy | Precision fraud | Recall fraud | F1 fraud | FP | FN |
-|---|---|---:|---:|---:|---:|---:|---:|
-| rules_baseline | original | 0.471 | 0.833 | 0.571 | 0.678 | 4 | 15 |
-| rules_baseline | paraphrase | 0.429 | 0.826 | 0.543 | 0.655 | 4 | 16 |
-| rules_baseline | subtle | 0.400 | 0.857 | 0.514 | 0.643 | 3 | 17 |
-| rules_baseline | asr_noise | 0.082 | 1.000 | 0.062 | 0.118 | 0 | 30 |
-| rules_baseline | all_augmented | 0.322 | 0.848 | 0.382 | 0.527 | 7 | 63 |
-| rules_baseline | all_variants | 0.365 | 0.843 | 0.431 | 0.570 | 11 | 78 |
+## Цель
+
+Проверить, насколько устойчивы правила и LLM-конфигурации к различным типам аугментаций мошеннических диалогов: `paraphrase`, `subtle`, `asr_noise`.
+
+## Правиловый baseline по вариантам
+
+| Вариант | Accuracy | Precision fraud | Recall fraud | F1 fraud | FP | FN |
+|---|---:|---:|---:|---:|---:|---:|
+| `original` | 0.471 | 0.833 | 0.571 | 0.678 | 4 | 15 |
+| `paraphrase` | 0.429 | 0.826 | 0.543 | 0.655 | 4 | 16 |
+| `subtle` | 0.400 | 0.857 | 0.514 | 0.643 | 3 | 17 |
+| `asr_noise` | 0.082 | 1.000 | 0.062 | 0.118 | 0 | 30 |
+| `all_augmented` | 0.322 | 0.848 | 0.382 | 0.527 | 7 | 63 |
+| `all_variants` | 0.365 | 0.843 | 0.431 | 0.570 | 11 | 78 |
+
+## LLM: агрегированные результаты
+
+| Архитектура | all_augmented F1 | all_variants F1 | all_augmented Recall | all_variants Recall |
+|---|---:|---:|---:|---:|
+| Qwen 2.5-14B `single_llm` | 0.853 | 0.864 | 0.794 | 0.810 |
+| Qwen 2.5-14B `llm_checklist` | 0.842 | 0.837 | 0.863 | 0.861 |
+| Qwen 2.5-14B `llm_self_check` | 0.843 | 0.841 | 0.922 | 0.927 |
+| Qwen 2.5-14B `llm_ensemble` | 0.811 | 0.815 | 0.863 | 0.869 |
+
+## Лучшая конфигурация по каждому варианту
+
+| Вариант | Лучшая конфигурация | F1 fraud |
+|---|---|---:|
+| `original` | `single_llm` | 0.896 |
+| `paraphrase` | `llm_checklist` | 0.889 |
+| `subtle` | `llm_self_check` | 0.810 |
+| `asr_noise` | `single_llm` | 0.881 |
+| `all_augmented` | `single_llm` | 0.853 |
+| `all_variants` | `single_llm` | 0.864 |
+
+## Интерпретация
+
+- Правиловый baseline оказался чувствителен к аугментациям, особенно к `asr_noise`, где `F1 fraud` упал до `0.118`.
+- Все LLM-конфигурации существенно устойчивее правилового подхода на аугментированных данных.
+- По суммарным показателям лучшей конфигурацией на `Experiment 2` стала `single_llm`.
+- Конфигурация `llm_self_check` показала лучший результат на варианте `subtle` и максимальную полноту на агрегированных аугментированных поднаборах.
+
+## Связанные графики
+
+- `exp2_f1_heatmap.png`
+- `exp2_robustness_lines.png`
+- `overall_f1_heatmap.png`

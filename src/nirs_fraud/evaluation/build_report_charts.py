@@ -19,6 +19,7 @@ import seaborn as sns
 
 OUTPUT_DIR = ROOT / "outputs" / "report_charts"
 EXP3_DIR = ROOT / "outputs" / "experiment_03"
+EXP4_DIR = ROOT / "outputs" / "experiment_04"
 VARIANT_ORDER = ["original", "paraphrase", "subtle", "asr_noise", "all_augmented"]
 ARCHITECTURE_ORDER = ["single_llm", "llm_checklist", "llm_self_check", "llm_ensemble"]
 ARCHITECTURE_LABELS = {
@@ -122,6 +123,19 @@ def load_experiment_03_metrics() -> pd.DataFrame:
     llm["display_name"] = llm["architecture"].map(ARCHITECTURE_LABELS)
     llm["group"] = "qwen"
     return pd.concat([baseline, llm], ignore_index=True, sort=False)
+
+
+def load_experiment_01_version_metrics() -> tuple[pd.DataFrame, pd.DataFrame]:
+    exp1_dir = ROOT / "outputs" / "experiment_01"
+    old_metrics = pd.read_csv(exp1_dir / "local_llm_experiment_01_Qwen_Qwen2_5-14B-Instruct_metrics.csv")
+    new_metrics = pd.read_csv((ROOT / "outputs" / "experiment_01_2") / "local_llm_experiment_01_Qwen_Qwen2_5-14B-Instruct_metrics.csv")
+    return old_metrics, new_metrics
+
+
+def load_experiment_04_experiment_01_metrics() -> pd.DataFrame:
+    exp4_exp1_dir = EXP4_DIR / "experiment_01"
+    gemma = pd.read_csv(exp4_exp1_dir / "gemma_experiment_01_gemma-4-31b-it_metrics.csv")
+    return gemma
 
 
 def setup_theme() -> None:
@@ -448,6 +462,91 @@ def plot_best_models_overview(exp1: pd.DataFrame, exp2_baseline: pd.DataFrame, e
     save_figure(path)
 
 
+def plot_experiment_04_experiment_01(path: Path, exp1: pd.DataFrame, gemma_exp1: pd.DataFrame) -> None:
+    baseline_row = exp1[exp1["group"] == "baseline"].iloc[0]
+    qwen_self_check = exp1[exp1["architecture"] == "llm_self_check"].iloc[0]
+    gemma_single = gemma_exp1[gemma_exp1["architecture"] == "single_llm"].iloc[0]
+    plot_df = pd.DataFrame(
+        [
+            {"model_name": "Правила", "f1_fraud": baseline_row["f1_fraud"], "family": "baseline"},
+            {"model_name": "Qwen 2.5-14B\nself-check", "f1_fraud": qwen_self_check["f1_fraud"], "family": "qwen"},
+            {"model_name": "Gemma 4-31B API\nsingle_llm", "f1_fraud": gemma_single["f1_fraud"], "family": "gemma"},
+        ]
+    ).sort_values("f1_fraud", ascending=True)
+    palette = {
+        "baseline": "#c44e52",
+        "qwen": "#4f78b7",
+        "gemma": "#55a868",
+    }
+    plt.figure(figsize=(9.5, 4.8))
+    ax = plt.gca()
+    ax.barh(
+        plot_df["model_name"],
+        plot_df["f1_fraud"],
+        color=[palette[family] for family in plot_df["family"]],
+        height=0.62,
+    )
+    ax.set_title("Доп. исследование 1: Experiment 1 для Gemma API")
+    ax.set_xlabel("F1 по классу fraud")
+    ax.set_ylabel("")
+    ax.set_xlim(0, 1.05)
+    for index, value in enumerate(plot_df["f1_fraud"]):
+        ax.text(value + 0.015, index, f"{value:.3f}", va="center", fontsize=10)
+    for spine in ["top", "right"]:
+        ax.spines[spine].set_visible(False)
+    save_figure(path)
+
+
+def plot_experiment_01_versions(path: Path, old_metrics: pd.DataFrame, new_metrics: pd.DataFrame) -> None:
+    architecture_order = ["single_llm", "llm_checklist", "llm_self_check", "llm_ensemble"]
+    architecture_labels = {
+        "single_llm": "single_llm",
+        "llm_checklist": "llm_checklist",
+        "llm_self_check": "llm_self_check",
+        "llm_ensemble": "llm_ensemble",
+    }
+    old_map = old_metrics.set_index("architecture")["f1_fraud"].to_dict()
+    new_map = new_metrics.set_index("architecture")["f1_fraud"].to_dict()
+    y_positions = list(range(len(architecture_order)))[::-1]
+
+    plt.figure(figsize=(10.2, 5.4))
+    ax = plt.gca()
+    ax.set_facecolor("#fbfbfc")
+    for y, architecture in zip(y_positions, architecture_order):
+        old_value = old_map.get(architecture)
+        new_value = new_map.get(architecture)
+        if old_value is None or new_value is None:
+            continue
+        ax.hlines(y, xmin=min(old_value, new_value), xmax=max(old_value, new_value), color="#c7cfda", linewidth=3.0, zorder=1)
+        ax.scatter(old_value, y, color="#b56576", s=150, edgecolors="white", linewidth=1.2, zorder=3)
+        ax.scatter(new_value, y, color="#4f78b7", s=150, edgecolors="white", linewidth=1.2, zorder=3)
+        delta = new_value - old_value
+        ax.text(old_value - 0.02, y, f"v1\n{old_value:.3f}", ha="right", va="center", fontsize=9, color="#8d4e5c")
+        ax.text(new_value + 0.02, y, f"v2\n{new_value:.3f}", ha="left", va="center", fontsize=9, color="#355b95")
+        ax.text(
+            (old_value + new_value) / 2,
+            y + 0.18,
+            f"{delta:+.3f}",
+            ha="center",
+            va="center",
+            fontsize=9,
+            bbox={"boxstyle": "round,pad=0.24", "fc": "#eef2f7", "ec": "none"},
+        )
+    ax.set_title("Доп. исследование 2: две версии Experiment 1")
+    ax.set_xlabel("F1 по классу fraud")
+    ax.set_ylabel("")
+    ax.set_yticks(y_positions)
+    ax.set_yticklabels([architecture_labels[architecture] for architecture in architecture_order])
+    ax.set_xlim(0, 1.05)
+    ax.grid(axis="x", color="#d7dbe2", linewidth=0.8)
+    ax.grid(axis="y", visible=False)
+    for spine in ["top", "right", "left"]:
+        ax.spines[spine].set_visible(False)
+    ax.spines["bottom"].set_color("#d7dbe2")
+    ax.tick_params(axis="y", length=0, pad=12)
+    save_figure(path)
+
+
 def write_chart_index(path: Path) -> None:
     lines = [
         "# Графики для отчета",
@@ -460,6 +559,8 @@ def write_chart_index(path: Path) -> None:
         "- `exp3_recall_comparison.png`: сравнение полноты по классу fraud для эксперимента 3 (внешний бенчмарк).",
         "- `overall_f1_heatmap.png`: сводная тепловая карта по всем экспериментам.",
         "- `overall_best_models.png`: сравнение правил и лучшего Qwen по всем экспериментам.",
+        "- `supplement_exp4_exp1_gemma.png`: доп. исследование 1, сравнение правил, Qwen и Gemma API на Experiment 1.",
+        "- `supplement_exp1_versions.png`: доп. исследование 2, сравнение двух версий Experiment 1 по F1.",
     ]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -471,6 +572,8 @@ def main() -> None:
     exp1 = load_experiment_01_metrics()
     exp2_baseline, exp2_llm = load_experiment_02_metrics()
     exp3 = load_experiment_03_metrics()
+    exp1_old_metrics, exp1_new_metrics = load_experiment_01_version_metrics()
+    gemma_exp1 = load_experiment_04_experiment_01_metrics()
 
     plot_horizontal_metric(
         exp1[["display_name", "f1_fraud"]].copy(),
@@ -500,6 +603,8 @@ def main() -> None:
     )
     plot_overall_heatmap(exp1, exp2_baseline, exp2_llm, exp3, OUTPUT_DIR / "overall_f1_heatmap.png")
     plot_best_models_overview(exp1, exp2_baseline, exp2_llm, exp3, OUTPUT_DIR / "overall_best_models.png")
+    plot_experiment_04_experiment_01(OUTPUT_DIR / "supplement_exp4_exp1_gemma.png", exp1, gemma_exp1)
+    plot_experiment_01_versions(OUTPUT_DIR / "supplement_exp1_versions.png", exp1_old_metrics, exp1_new_metrics)
     write_chart_index(OUTPUT_DIR / "chart_index.md")
     print(f"Wrote report charts to {OUTPUT_DIR}")
 

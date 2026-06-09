@@ -1,11 +1,10 @@
-# Внешний Kaggle Benchmark
+# Внешний набор Kaggle
 
 ## Роль в НИРС
 
-Kaggle-набор используется как `external_benchmark`, а не как основной датасет работы.
-Его задача — показать, что пайплайн работает не только на внутреннем synthetic core.
+Kaggle-набор используется как `external_benchmark`, а не как основной датасет работы. Его задача - показать, что подход работает не только на внутреннем синтетическом наборе.
 
-## Рекомендуемый объём
+## Рекомендуемый объем
 
 - `fraud/scam`: 50
 - `safe/non-scam`: 50
@@ -14,7 +13,7 @@ Kaggle-набор используется как `external_benchmark`, а не 
 
 ## Где лежит шаблон
 
-- raw шаблон: [kaggle_scam_non_scam_ru_subset.csv](/Users/margogusarova/Documents/НИРС/data/05_external_benchmark/raw/kaggle_scam_non_scam_ru_subset.csv)
+- исходный шаблон: `data/05_external_benchmark/raw/kaggle_scam_non_scam_ru_subset.csv`
 
 ## Обязательные поля
 
@@ -33,9 +32,9 @@ Kaggle-набор используется как `external_benchmark`, а не 
 
 ## Нормализация
 
-Для перевода raw CSV в нормализованный benchmark используется:
+Для перевода исходного CSV в нормализованный внешний набор используется:
 
-- [prepare_kaggle_external_benchmark.py](/Users/margogusarova/Documents/НИРС/src/nirs_fraud/pipeline/prepare_kaggle_external_benchmark.py)
+- `src/nirs_fraud/pipeline/prepare_kaggle_external_benchmark.py`
 
 Запуск:
 
@@ -48,6 +47,6 @@ python3 -m src.nirs_fraud.pipeline.prepare_kaggle_external_benchmark
 - `data/05_external_benchmark/normalized/kaggle_external_benchmark_v1.jsonl`
 - `data/05_external_benchmark/normalized/kaggle_external_benchmark_v1.csv`
 
-## Корректная формулировка для отчёта
+## Корректная формулировка для отчета
 
-Внешний Kaggle benchmark используется как независимый тестовый корпус для дополнительной проверки переносимости пайплайна. Он не смешивается с `internal_synthetic_core` и не заменяет собственный вклад работы в части генерации и валидации данных.
+Внешний Kaggle-набор используется как независимый тестовый корпус для дополнительной проверки переносимости подхода. Он не смешивается с `internal_synthetic_core` и не заменяет собственный вклад работы в части генерации и валидации данных.

@@ -1,5 +1,28 @@
-# Experiment 3 Summary
+# Эксперимент 3. Внешний бенчмарк
 
-| Model | Accuracy | Precision fraud | Recall fraud | F1 fraud | FP | FN |
+## Цель
+
+Проверить переносимость подходов на внешнем наборе данных, не совпадающем с основным синтетическим корпусом.
+
+## Основные результаты
+
+| Подход | Accuracy | Precision fraud | Recall fraud | F1 fraud | FP | FN |
 |---|---:|---:|---:|---:|---:|---:|
-| rules_baseline | 0.525 | 1.000 | 0.133 | 0.235 | 0 | 26 |
+| Правила | 0.525 | 1.000 | 0.133 | 0.235 | 0 | 26 |
+| Qwen 2.5-14B `single_llm` | 0.852 | 1.000 | 0.967 | 0.983 | 0 | 1 |
+| Qwen 2.5-14B `llm_checklist` | 0.885 | 1.000 | 0.933 | 0.966 | 0 | 2 |
+| Qwen 2.5-14B `llm_self_check` | 0.967 | 1.000 | 0.967 | 0.983 | 0 | 1 |
+| Qwen 2.5-14B `llm_ensemble` | 0.934 | 1.000 | 0.967 | 0.983 | 0 | 1 |
+
+## Интерпретация
+
+- Все LLM-конфигурации существенно превзошли правиловый baseline на внешнем наборе.
+- Максимальный `accuracy` показала конфигурация `llm_self_check`: `0.967`.
+- Максимальный `F1 fraud` (`0.983`) показали сразу три конфигурации: `single_llm`, `llm_self_check`, `llm_ensemble`.
+- Правиловый baseline оказался чрезмерно консервативным: при `precision fraud = 1.000` его `recall fraud` составил только `0.133`.
+
+## Связанные графики
+
+- `exp3_f1_comparison.png`
+- `exp3_recall_comparison.png`
+- `overall_f1_heatmap.png`
